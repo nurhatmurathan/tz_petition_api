@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { User } from "./../entities/user/user.entity";
@@ -19,6 +19,18 @@ export class AuthService {
         }
 
         return this.getAccessRefreshToken(user);
+    }
+
+    async signUp(login: string, password: string) {
+        const user = await this.userService.findOneByLogin(login);
+
+        if (user) {
+            throw new BadRequestException("This user is already loged in!");
+        }
+
+        await this.userService.create(login, password);
+
+        return this.signIn(login, password);
     }
 
     private async getAccessRefreshToken(user: User) {

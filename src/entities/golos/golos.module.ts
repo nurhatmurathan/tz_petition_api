@@ -1,9 +1,13 @@
-import { Module } from '@nestjs/common';
-import { GolosService } from './golos.service';
-import { GolosController } from './golos.controller';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { GolosController } from "./golos.controller";
+import { Golos } from "./golos.entity";
+import { GolosService } from "./golos.service";
 
 @Module({
-  providers: [GolosService],
-  controllers: [GolosController]
+    imports: [TypeOrmModule.forFeature([Golos])],
+    controllers: [GolosController],
+    providers: [GolosService],
+    exports: [GolosService],
 })
 export class GolosModule {}

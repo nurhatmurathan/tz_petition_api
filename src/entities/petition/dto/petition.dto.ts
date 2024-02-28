@@ -7,4 +7,7 @@ export class PetitionDto extends PetitionCreateDto {
 
     @ApiProperty()
     createdDate: string;
+
+    @ApiProperty()
+    numberOfVotes: number;
 }

@@ -25,7 +25,7 @@ export class PetitionService {
     }
 
     async list(): Promise<Petition[]> {
-        return this.petitionRepository.find({ relations: { votes: true } });
+        return this.petitionRepository.find({ relations: { votes: { user: true } } });
     }
 
     async addVote(userId: number, id: number): Promise<string> {

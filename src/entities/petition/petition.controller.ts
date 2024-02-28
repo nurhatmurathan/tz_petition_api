@@ -27,19 +27,19 @@ export class PetitionController {
     @HttpCode(HttpStatus.CREATED)
     @ApiDefaultResponse({ type: PetitionDto })
     @Post("create")
-    async create(@Body() petitionData: PetitionCreateDto) {
+    async create(@Body() petitionData: PetitionCreateDto, @Request() request) {
         const instance = await this.petitionService.create(petitionData.name, petitionData.description);
 
-        return this.mapToPetitionDto(instance);
+        return this.mapToPetitionDto(instance, request.user.sub);
     }
 
     @HttpCode(HttpStatus.OK)
     @ApiDefaultResponse({ type: PetitionDto, isArray: true })
     @Get("list")
-    async list() {
+    async list(@Request() request) {
         const instances = await this.petitionService.list();
 
-        return instances.map((instance) => this.mapToPetitionDto(instance));
+        return instances.map((instance) => this.mapToPetitionDto(instance, request.user.sub));
     }
 
     @Post("vote/:id")
@@ -54,10 +54,11 @@ export class PetitionController {
         return this.petitionService.cancelVote(request.user.sub, id);
     }
 
-    private mapToPetitionDto(instance: Petition) {
+    private mapToPetitionDto(instance: Petition, userId: number) {
         const { id, name, description, createdDate } = instance;
-        const numberOfVotes = instance.votes?.length || 0;
+        const numberOfVotes: number = instance.votes?.length || 0;
+        const voted: boolean = instance.votes?.some((vote) => vote.user.id === userId) || false;
 
-        return { id, name, description, createdDate, numberOfVotes };
+        return { id, name, description, createdDate, numberOfVotes, voted };
     }
 }

@@ -10,4 +10,7 @@ export class PetitionDto extends PetitionCreateDto {
 
     @ApiProperty()
     numberOfVotes: number;
+
+    @ApiProperty()
+    voted: boolean;
 }

@@ -9,6 +9,11 @@
 
 Test task with simple db entities. Petition Api
 
+1. User authorization occurs via JWT
+2. 1 user can add no more than 1 vote per petition
+3. Each user can remove his own vote, but not someone else’s
+4. Create Petition can anyone
+
 ## Prerequisites
 
 -   docker engine

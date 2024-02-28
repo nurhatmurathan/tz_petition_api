@@ -2,11 +2,11 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { AuthModule } from "./auth/auth.module";
 import { DatabaseModule } from "./database/database.module";
-import { GolosModule } from "./entities/golos/golos.module";
 import { PetitionModule } from "./entities/petition/petition.module";
 import { UserModule } from "./entities/user/user.module";
-import { AuthModule } from './auth/auth.module';
+import { VoteModule } from "./entities/vote/vote.module";
 
 @Module({
     imports: [
@@ -14,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
         DatabaseModule,
         UserModule,
         PetitionModule,
-        GolosModule,
+        VoteModule,
         AuthModule,
     ],
     controllers: [AppController],

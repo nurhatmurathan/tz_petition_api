@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Golos } from "../golos/golos.entity";
+import { Vote } from "../vote/vote.entity";
 
 @Entity()
 export class Petition {
@@ -15,6 +15,6 @@ export class Petition {
     @Column({ name: "created_date", type: "timestamp" })
     createdDate: Date;
 
-    @OneToMany(() => Golos, (golos) => golos.petition)
-    goloses: Golos[];
+    @OneToMany(() => Vote, (vote) => vote.petition)
+    votes: Vote[];
 }

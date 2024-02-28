@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Golos } from "../golos/golos.entity";
+import { Vote } from "../vote/vote.entity";
 
 @Entity()
 export class User {
@@ -12,6 +12,6 @@ export class User {
     @Column({ name: "password", type: "varchar" })
     password: string;
 
-    @OneToMany(() => Golos, (golos) => golos.user)
-    goloses: Golos[];
+    @OneToMany(() => Vote, (vote) => vote.user)
+    votes: Vote[];
 }

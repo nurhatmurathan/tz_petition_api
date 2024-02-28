@@ -5,12 +5,14 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    ParseBoolPipe,
     ParseIntPipe,
     Post,
+    Query,
     Request,
     UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiDefaultResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiDefaultResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "./../../auth/guards/auth.guard";
 import { PetitionCreateDto } from "./dto/petition.create.dto";
 import { PetitionDto } from "./dto/petition.dto";
@@ -35,11 +37,20 @@ export class PetitionController {
 
     @HttpCode(HttpStatus.OK)
     @ApiDefaultResponse({ type: PetitionDto, isArray: true })
+    @ApiQuery({ name: "search-by-name", required: false })
+    @ApiQuery({ name: "orderBy", enum: ["ASC", "DESC"] })
+    @ApiQuery({ name: "voted", enum: ["false", "true"] })
     @Get("list")
-    async list(@Request() request) {
-        const instances = await this.petitionService.list();
+    async list(
+        @Query("search-by-name") name?: string,
+        @Query("orderBy") orderBy: "ASC" | "DESC" = "ASC",
+        @Query("voted", ParseBoolPipe) voted?: boolean,
+        @Request() request?
+    ) {
+        const userId: number = request.user.sub;
+        const instances = await this.petitionService.list(userId, name, voted, orderBy);
 
-        return instances.map((instance) => this.mapToPetitionDto(instance, request.user.sub));
+        return instances.map((instance) => this.mapToPetitionDto(instance, userId));
     }
 
     @Post("vote/:id")

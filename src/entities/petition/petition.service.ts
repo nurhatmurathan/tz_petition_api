@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Like, Repository } from "typeorm";
 import { VoteService } from "../vote/vote.service";
 import { Petition } from "./petition.entity";
 
@@ -24,8 +24,28 @@ export class PetitionService {
         return this.petitionRepository.save(instance);
     }
 
-    async list(): Promise<Petition[]> {
-        return this.petitionRepository.find({ relations: { votes: { user: true } } });
+    async list(
+        userId: number,
+        name?: string,
+        voted?: boolean,
+        orderBy: "ASC" | "DESC" = "ASC"
+    ): Promise<Petition[]> {
+        let whereCondition: FindOptionsWhere<Petition> = {};
+
+        if (name) {
+            whereCondition = { ...whereCondition, name: Like(`%${name}%`) };
+        }
+        if (voted) {
+            whereCondition = { ...whereCondition, votes: { user: { id: userId } } };
+        }
+
+        return this.petitionRepository.find({
+            where: whereCondition,
+            order: {
+                createdDate: orderBy,
+            },
+            relations: { votes: { user: true } },
+        });
     }
 
     async addVote(userId: number, id: number): Promise<string> {

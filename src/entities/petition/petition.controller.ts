@@ -1,4 +1,27 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import { ApiDefaultResponse, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "./../../auth/guards/auth.guard";
+import { PetitionCreateDto } from "./dto/petition.create.dto";
+import { PetitionDto } from "./dto/petition.dto";
+import { PetitionService } from "./petition.service";
 
-@Controller('petition')
-export class PetitionController {}
+@ApiTags("Petition")
+@UseGuards(AuthGuard)
+@Controller("petition")
+export class PetitionController {
+    constructor(private petitionService: PetitionService) {}
+
+    @HttpCode(HttpStatus.CREATED)
+    @ApiDefaultResponse({ type: PetitionDto })
+    @Post("create")
+    async create(@Body() petitionData: PetitionCreateDto) {
+        return await this.petitionService.create(petitionData.name, petitionData.description);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @ApiDefaultResponse({ type: PetitionDto, isArray: true })
+    @Get("list")
+    async list() {
+        return await this.petitionService.list();
+    }
+}

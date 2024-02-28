@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
-import { ApiDefaultResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiDefaultResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "./../../auth/guards/auth.guard";
 import { PetitionCreateDto } from "./dto/petition.create.dto";
 import { PetitionDto } from "./dto/petition.dto";
@@ -7,6 +7,7 @@ import { PetitionService } from "./petition.service";
 
 @ApiTags("Petition")
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 @Controller("petition")
 export class PetitionController {
     constructor(private petitionService: PetitionService) {}

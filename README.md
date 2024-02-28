@@ -20,7 +20,7 @@ Test task with simple db entities. Petition Api
 
 ```bash
 docker-compose up
-// ports 3000, 5432 must be open
+# ports 3000, 5432 must be open
 ```
 
 -   open the swagger page http://localhost:3000/docs

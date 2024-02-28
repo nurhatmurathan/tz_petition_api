@@ -29,3 +29,22 @@ docker-compose up
 ```
 
 -   open the swagger page http://localhost:3000/docs
+
+## Testing Api
+
+> There is swagger for http requests
+
+#### Auth
+
+![auth swagger](./docs/auth_sw.png)
+
+-   sing-in, sign-up
+-   > return access and refresh tokens
+-   authorize using Jwt token
+-   > ![authorize](./docs/authorize.png)
+
+#### Petition
+
+![petition swagger](./docs/petition-sw.png)
+
+-   Petition actions

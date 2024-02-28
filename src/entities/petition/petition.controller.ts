@@ -1,4 +1,15 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Post,
+    Request,
+    UseGuards,
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiDefaultResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "./../../auth/guards/auth.guard";
 import { PetitionCreateDto } from "./dto/petition.create.dto";
@@ -24,5 +35,17 @@ export class PetitionController {
     @Get("list")
     async list() {
         return await this.petitionService.list();
+    }
+
+    @Post("vote/:id")
+    @HttpCode(HttpStatus.ACCEPTED)
+    async vote(@Param("id", ParseIntPipe) id: number, @Request() request): Promise<any> {
+        return this.petitionService.addVote(request.user.sub, id);
+    }
+
+    @Post("cancel-vote/:id")
+    @HttpCode(HttpStatus.ACCEPTED)
+    async cancelVote(@Param("id", ParseIntPipe) id: number, @Request() request): Promise<any> {
+        return this.petitionService.cancelVote(request.user.sub, id);
     }
 }

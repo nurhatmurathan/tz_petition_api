@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { Petition } from "../petition/petition.entity";
 import { User } from "../user/user.entity";
 
 @Entity()
+@Unique(["user", "petition"])
 export class Vote {
     @PrimaryGeneratedColumn()
     id: number;

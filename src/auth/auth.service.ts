@@ -25,7 +25,7 @@ export class AuthService {
         const user = await this.userService.findOneByLogin(login);
 
         if (user) {
-            throw new BadRequestException("This user is already logged in!");
+            throw new BadRequestException("This user is already registered!");
         }
 
         await this.userService.create(login, password);
